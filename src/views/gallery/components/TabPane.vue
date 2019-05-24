@@ -34,26 +34,29 @@
         label="Thumbnail"
         width="120">
         <template slot-scope="scope">
-          <vue-viewer :dom="'img_'+scope.$index" :url="scope.row.url"></vue-viewer>
+          <vue-viewer :dom="'img_'+scope.$index" :url="scope.row.url" />
           <el-image
             :id="'img_'+scope.$index"
             style="width: 100px; height: 50px"
             :src="scope.row.thumbnail"
-            :fit="'cover'"></el-image>
+            :fit="'cover'"
+          />
         </template>
       </el-table-column>
       <el-table-column
         prop="url"
-        label="Url">
+        label="Url"
+      >
         <template slot-scope="{row}">
           {{ row.url }}
-          <el-button type="success" plain size="mini" v-clipboard:copy="row.url" v-clipboard:success="clipboardSuccess">copy</el-button>
+          <el-button v-clipboard:copy="row.url" v-clipboard:success="clipboardSuccess" size="mini" plain type="success">copy</el-button>
         </template>
       </el-table-column>
       <el-table-column
         label="Operation"
         width="200"
-        align="center">
+        align="center"
+      >
         <template slot-scope="scope">
           <router-link :to="'/gallery/upload/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">
@@ -61,8 +64,8 @@
             </el-button>
           </router-link>
           <el-button type="danger" size="small" icon="el-icon-delete">
-              Del
-            </el-button>
+            Del
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -80,15 +83,15 @@ export default {
   directives: {
     clipboard
   },
+  components: {
+    Pagination,
+    VueViewer
+  },
   props: {
     type: {
       type: String,
       default: 'GL'
     }
-  },
-  components: {
-    Pagination,
-    VueViewer
   },
   data() {
     return {
@@ -111,12 +114,12 @@ export default {
     getList(q) {
       this.loading = true
       this.$emit('create') // for test
-      const listApi = this.type === 'GL' ? GL : BO;
+      const listApi = this.type === 'GL' ? GL : BO
       const query = Object.assign(this.listQuery, q || {})
 
       listApi(query).then(res => {
-        this.list = res.data.items;
-        this.total = res.data.total;
+        this.list = res.data.items
+        this.total = res.data.total
         this.loading = false
       })
     },

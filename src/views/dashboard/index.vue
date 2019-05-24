@@ -48,24 +48,25 @@
           <!-- 4、事件备忘录(三列展示：灵光一现~pre、就是干~doing、你好棒棒~done，拖入拖出实现增删)Vue.Draggable, ui模仿teambition,    npm install vuedraggable sortablejs --save -->
           <h2>需求池</h2>
           <el-row :gutter="20">
-            <el-col :span="8" v-for="item in needsPool" :key="item.tabKey">
+            <el-col v-for="item in needsPool" :key="item.tabKey" :span="8">
               <el-card shadow="never" :body-style="{backgroundColor:'#eee'}">
                 <el-dropdown :hide-on-click="false">
                   <span class="el-dropdown-link">
-                  {{item.tabName}}<i class="el-icon-arrow-down el-icon--right"></i>
+                    {{ item.tabName }}<i class="el-icon-arrow-down el-icon--right" />
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>{{item.desc}}</el-dropdown-item>
+                    <el-dropdown-item>{{ item.desc }}</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
-                <draggable v-model="item.dragItemlist" :options="{group:'demand'}" @start="drag=true" @end="drag=false" class="m-dragZone">
+                <draggable v-model="item.dragItemlist" :options="{group:'demand'}" class="m-dragZone" @start="drag=true" @end="drag=false">
                   <div v-for="element in item.dragItemlist" :key="element.id" class="u-dragItem">
-                    <i class="el-icon-close" @click="delIdea(item,element.id)"></i>
+                    <i class="el-icon-close" @click="delIdea(item,element.id)" />
                     <el-input
+                      v-model="element.name"
                       type="textarea"
                       :autosize="{ minRows: 2}"
                       placeholder="请输入内容"
-                      v-model="element.name">{{element.name}}
+                    >{{ element.name }}
                     </el-input>
                   </div>
                   <el-button type="primary" icon="el-icon-circle-plus-outline" @click="addIdea(item)">添加点子</el-button>
@@ -82,59 +83,63 @@
 <script>
 import { mapGetters } from 'vuex'
 import CountTo from '@/components/VueCount'
-import draggable from 'vuedraggable';
+import draggable from 'vuedraggable'
 
 export default {
   name: 'Dashboard',
-  data(){
+  components: {
+    CountTo,
+    draggable
+  },
+  data() {
     return {
-      needsPool:[
+      needsPool: [
         {
-          tabKey:1,
-          tabName:'灵光一现',
-          desc:'想到的需求',
-          dragItemlist:[
+          tabKey: 1,
+          tabName: '灵光一现',
+          desc: '想到的需求',
+          dragItemlist: [
             {
-              name:'vuejs原理了解下',
-              id:'1',
+              name: 'vuejs原理了解下',
+              id: '1'
             },
             {
-              name:'react搞起？',
-              id:'2',
+              name: 'react搞起？',
+              id: '2'
             }
           ]
         },
         {
-          tabKey:2,
-          tabName:'就是干',
-          desc:'正在努力实现的需求',
-          dragItemlist:[
+          tabKey: 2,
+          tabName: '就是干',
+          desc: '正在努力实现的需求',
+          dragItemlist: [
             {
-              name:'vue后台系统',
-              id:'5',
+              name: 'vue后台系统',
+              id: '5'
             },
             {
-              name:'express个人博客',
-              id:'6',
+              name: 'express个人博客',
+              id: '6'
             }
           ]
         },
         {
-          tabKey:3,
-          tabName:'你好棒棒',
-          desc:'完成并上线的需求',
-          dragItemlist:[
+          tabKey: 3,
+          tabName: '你好棒棒',
+          desc: '完成并上线的需求',
+          dragItemlist: [
             {
-              name:'react-native DEMO',
-              id:'7',
+              name: 'react-native DEMO',
+              id: '7'
             },
             {
-              name:'个人博客',
-              id:'8',
-            },
+              name: '个人博客',
+              id: '8'
+            }
           ]
         }
-      ],
+      ]
     }
   },
   computed: {
@@ -142,36 +147,32 @@ export default {
       'name'
     ])
   },
-  components:{
-    CountTo,
-    draggable
-  },
-  methods:{
-    addIdea(item){
-      //增加点子
-      let curPoolIndex = this.needsPool.findIndex((val)=>{
-        return val.tabKey === item.tabKey;
-      });
-      let curList = this.needsPool[curPoolIndex].dragItemlist;
-      let len = curList.length;
+  methods: {
+    addIdea(item) {
+      // 增加点子
+      const curPoolIndex = this.needsPool.findIndex((val) => {
+        return val.tabKey === item.tabKey
+      })
+      const curList = this.needsPool[curPoolIndex].dragItemlist
+      const len = curList.length
       curList.push([{
-        name:'',
-        id:len,
-      }]);
+        name: '',
+        id: len
+      }])
     },
-    delIdea(item,id){
-      //删除点子
-      //找到信息所在栏
-      let curPoolIndex = this.needsPool.findIndex((val)=>{
-        return val.tabKey === item.tabKey;
-      });
-      let curList = this.needsPool[curPoolIndex].dragItemlist;
-      //找到具体信息
-      let curEleIndex = curList.findIndex((val)=>{
-        return val.id === id;
-      });
-      curList.splice(curEleIndex,1)
-    },
+    delIdea(item, id) {
+      // 删除点子
+      // 找到信息所在栏
+      const curPoolIndex = this.needsPool.findIndex((val) => {
+        return val.tabKey === item.tabKey
+      })
+      const curList = this.needsPool[curPoolIndex].dragItemlist
+      // 找到具体信息
+      const curEleIndex = curList.findIndex((val) => {
+        return val.id === id
+      })
+      curList.splice(curEleIndex, 1)
+    }
   }
 }
 </script>

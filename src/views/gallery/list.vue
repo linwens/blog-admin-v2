@@ -3,17 +3,17 @@
     <div class="search-container df mb10">
       <div class="mr10">
         标题:
-        <el-input v-model="listQuery.title" class="w200"></el-input>
+        <el-input v-model="listQuery.title" class="w200" />
       </div>
       <div class="mr10">
         简介:
-        <el-input v-model="listQuery.brief" class="w200"></el-input>
+        <el-input v-model="listQuery.brief" class="w200" />
       </div>
       <div class="mr10">
         时间排序：
         <el-select v-model="listQuery.sort" placeholder="请选择排序" class="w200">
-          <el-option label="按时间从近到远" :value="1"></el-option>
-          <el-option label="按时间从远到近" :value="-1"></el-option>
+          <el-option label="按时间从近到远" :value="1" />
+          <el-option label="按时间从远到近" :value="-1" />
         </el-select>
       </div>
       <el-button type="primary" @click="search()">查询</el-button>
@@ -21,7 +21,7 @@
     <el-tabs v-model="actTab" class="mt15" type="border-card">
       <el-tab-pane v-for="item in tabs" :key="item.key" :label="item.label" :name="item.key">
         <keep-alive>
-          <tab-pane :ref="'tabpane_'+actTab" v-if="actTab==item.key" :type="item.key"/>
+          <tab-pane v-if="actTab==item.key" :ref="'tabpane_'+actTab" :type="item.key" />
         </keep-alive>
       </el-tab-pane>
     </el-tabs>
@@ -29,11 +29,13 @@
 </template>
 <script>
 import tabPane from './components/TabPane'
-import { constants } from 'fs';
 
 export default {
-  name:'List',
-  data(){
+  name: 'List',
+  components: {
+    tabPane
+  },
+  data() {
     return {
       listQuery: {
         title: null,
@@ -50,20 +52,17 @@ export default {
           key: 'BO'
         }
       ],
-      actTab: 'GL', //默认展示的选项卡
+      actTab: 'GL' // 默认展示的选项卡
     }
-  },
-  components: {
-    tabPane
   },
   created() {
     // this.getGalleryList()
   },
   methods: {
-    search(){
+    search() {
       console.log(this.listQuery)
-      this.$refs['tabpane_'+this.actTab][0].getList(this.listQuery);
-    },
+      this.$refs['tabpane_' + this.actTab][0].getList(this.listQuery)
+    }
   }
 }
 </script>

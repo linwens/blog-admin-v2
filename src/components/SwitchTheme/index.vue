@@ -1,6 +1,6 @@
 <template>
   <div class="m-theme-radio">
-    <svg-icon icon-class="theme" style="font-size:20px;"/>
+    <svg-icon icon-class="theme" style="font-size:20px;" />
     <el-radio-group v-model="theme">
       <el-radio :label="''">默认主题</el-radio>
       <el-radio :label="'dark-theme'">dark主题</el-radio>
