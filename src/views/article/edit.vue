@@ -1,0 +1,115 @@
+<template>
+  <div class="article-container m15">
+    <aside class="mb10">
+      这里是<a href="https://segmentfault.com/markdown" target="_blank">markdown</a>语法提示
+    </aside>
+    <div class="mb10">
+      <el-input placeholder="请输入标题" v-model="title" class="input-with-select">
+        <el-select v-model="type" slot="prepend" placeholder="请选择" class="w100">
+          <el-option label="原创" value="1"></el-option>
+          <el-option label="笔记" value="2"></el-option>
+          <el-option label="翻译" value="3"></el-option>
+        </el-select>
+      </el-input>
+    </div>
+    <div class="mb10" style="display:flex;">
+      <div class="mr10">
+        <el-date-picker
+          v-model="time"
+          type="datetime"
+          placeholder="选择发布时间">
+        </el-date-picker>
+      </div>
+      <div>
+        <tree-select
+          :value.sync="tags"
+          :options="tagsData"
+          multiple/>
+      </div>
+    </div>
+    <div class="mb10">
+      <el-input
+        type="textarea"
+        placeholder="请输入简介"
+        v-model="brief"
+        maxlength="300"
+        show-word-limit
+      >
+      </el-input>
+    </div>
+    <div class="editor-container mb10">
+      <markdown-editor v-model="content" height="600px" />
+    </div>
+    <div class="btns">
+      <el-button type="primary">提交按钮</el-button>
+      <el-button type="warning">暂存按钮</el-button>
+    </div>
+  </div>  
+</template>
+<script>
+import MarkdownEditor from '@/components/MarkdownEditor'
+import TreeSelect from '@/components/TreeSelect'
+
+export default {
+  name: 'List',
+  data() {
+    return {
+      type:'',
+      title:'',
+      time:'',
+      tags: [], // 标签
+      tagsData:[ {
+        id: 'fruits',
+        label: 'Fruits',
+        children: [ {
+          id: 'apple',
+          label: 'Apple 🍎',
+          isNew: true,
+        }, {
+          id: 'grapes',
+          label: 'Grapes 🍇',
+        }, {
+          id: 'pear',
+          label: 'Pear 🍐',
+        }, {
+          id: 'strawberry',
+          label: 'Strawberry 🍓',
+        }, {
+          id: 'watermelon',
+          label: 'Watermelon 🍉',
+        } ],
+      }, {
+        id: 'vegetables',
+        label: 'Vegetables',
+        children: [ {
+          id: 'corn',
+          label: 'Corn 🌽',
+        }, {
+          id: 'carrot',
+          label: 'Carrot 🥕',
+        }, {
+          id: 'eggplant',
+          label: 'Eggplant 🍆',
+        }, {
+          id: 'tomato',
+          label: 'Tomato 🍅',
+        } ],
+      } ],
+      brief:'', // 简介
+      inputVisible: false,
+      inputValue: '',
+      content:''
+    }
+  },
+  components: { 
+    MarkdownEditor,
+    TreeSelect
+  },
+  methods: {
+    
+  }
+}
+</script>
+<style>
+
+</style>
