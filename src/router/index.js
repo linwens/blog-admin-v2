@@ -110,6 +110,21 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/npm',
+    component: Layout,
+    redirect: '/npm/list',
+    name: 'Npm',
+    meta: { title: 'Npm', icon: 'npm' },
+    children: [
+      {
+        path: 'list',
+        name: 'List',
+        component: () => import('@/views/npm/list'),
+        meta: { title: 'npm项目', icon: 'npm', roles: ['admin'] }
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

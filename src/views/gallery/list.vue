@@ -3,20 +3,20 @@
     <div class="search-container df mb10">
       <div class="mr10">
         标题:
-        <el-input v-model="listQuery.title" class="w200" />
+        <el-input v-model="listQuery.title" class="w200" size="mini" />
       </div>
       <div class="mr10">
         简介:
-        <el-input v-model="listQuery.brief" class="w200" />
+        <el-input v-model="listQuery.brief" class="w200" size="mini" />
       </div>
       <div class="mr10">
         时间排序：
-        <el-select v-model="listQuery.sort" placeholder="请选择排序" class="w200">
+        <el-select v-model="listQuery.sort" placeholder="请选择排序" class="w200" size="mini">
           <el-option label="按时间从近到远" :value="1" />
           <el-option label="按时间从远到近" :value="-1" />
         </el-select>
       </div>
-      <el-button type="primary" @click="search()">查询</el-button>
+      <el-button type="primary" @click="search()" size="mini">查询</el-button>
     </div>
     <el-tabs v-model="actTab" class="mt15" type="border-card">
       <el-tab-pane v-for="item in tabs" :key="item.key" :label="item.label" :name="item.key">

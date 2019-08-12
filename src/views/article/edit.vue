@@ -108,6 +108,15 @@ export default {
   methods: {}
 }
 </script>
-<style>
-
+<style lang="scss">
+  .vue-treeselect__control{
+    height: 40px!important;
+  }
+  .vue-treeselect__placeholder {
+    line-height: 38px!important;
+    font-size: 14px;
+  }
+  .vue-treeselect__multi-value {
+    vertical-align: unset;
+  }
 </style>

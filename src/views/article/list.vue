@@ -3,30 +3,30 @@
     <div class="search-container df mb10">
       <div class="mr10">
         标题:
-        <el-input v-model="listQuery.title" class="w200" />
+        <el-input v-model="listQuery.title" class="w200" size="mini" />
       </div>
       <div class="mr10">
         简介:
-        <el-input v-model="listQuery.brief" class="w200" />
+        <el-input v-model="listQuery.brief" class="w200" size="mini" />
       </div>
       <div class="mr10">
         状态:
         <div class="dib w200">
-          <tree-select
-            :value.sync="listQuery.status"
-            :options="tagsData"
-            multiple
-          />
+          <el-select v-model="listQuery.status" multiple placeholder="请选择文章状态" class="w200" size="mini">
+            <el-option label="delete" :value="1" />
+            <el-option label="draft" :value="2" />
+            <el-option label="published" :value="3" />
+          </el-select>
         </div>
       </div>
       <div class="mr10">
         时间排序：
-        <el-select v-model="listQuery.sort" placeholder="请选择排序" class="w200">
+        <el-select v-model="listQuery.sort" placeholder="请选择排序" class="w200" size="mini">
           <el-option label="按时间从近到远" :value="1" />
           <el-option label="按时间从远到近" :value="-1" />
         </el-select>
       </div>
-      <el-button type="primary" @click="getList()">查询</el-button>
+      <el-button type="primary" @click="getList()" size="mini">查询</el-button>
     </div>
     <el-table
       :data="list"
