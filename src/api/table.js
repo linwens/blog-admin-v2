@@ -10,15 +10,7 @@ export function getList(query) {
 
 export function getGalleryList(query) {
   return request({
-    url: '/table/gallery/list',
-    method: 'get',
-    params: query
-  })
-}
-
-export function getBlogList(query) {
-  return request({
-    url: '/table/gallery/list',
+    url: '/getImglist',
     method: 'get',
     params: query
   })

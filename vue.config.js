@@ -34,10 +34,11 @@ module.exports = {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: { // VUE_APP_BASE_API在 ./.env.development or ./.env.production
-        target: `http://localhost:${port}/mock`,
+        // target: `http://localhost:${port}/mock`,
+        target: `http://localhost:3100`,
         changeOrigin: true,
         pathRewrite: { // 请求链接修改，把api去掉
-          ['^' + process.env.VUE_APP_BASE_API]: ''
+          ['^' + process.env.VUE_APP_BASE_API]: '/ajax'
         }
       }
     },

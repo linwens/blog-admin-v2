@@ -31,7 +31,7 @@
 @mixin boxModel($type, $value, $direction: '') {
   $style1: null;
   $style2: null;
-  @while $value>0 {
+  @while $value>=0 {
     @if $type == m {
       $style1: margin
     } @else if $type == p {
@@ -85,7 +85,6 @@
       } @else if $type == f {
         position: fixed;
       }
-      top:0px;left:0px;
     }
   }
 }
@@ -101,12 +100,25 @@
     .#{$type}#{$n} {
       #{$style}: $n * 1px !important;
     }
-    @if $n >300 {
+    @if $n >= 400 {
       $n: $n - 100
-    }@else if $n > 100 {
+    }@else if $n >= 200 {
       $n: $n - 50
     } @else {
       $n: $n - 10
+    }
+  }
+}
+// 设置字体大小
+@mixin fs($n) {
+  @while $n>9 {
+    .fs#{$n} {
+      font-size: $n * 1px !important;
+    }
+    @if $n >40 {
+      $n: $n - 10
+    } @else {
+      $n: $n - 1
     }
   }
 }

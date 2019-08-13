@@ -2,31 +2,26 @@
   <div class="article-container m15">
     <div class="search-container df mb10">
       <div class="mr10">
-        标题:
-        <el-input v-model="listQuery.title" class="w200" size="mini" />
-      </div>
-      <div class="mr10">
-        简介:
-        <el-input v-model="listQuery.brief" class="w200" size="mini" />
+        关键字:
+        <el-input v-model="listQuery.schWord" class="w200" size="mini" />
       </div>
       <div class="mr10">
         状态:
         <div class="dib w200">
           <el-select v-model="listQuery.status" multiple placeholder="请选择文章状态" class="w200" size="mini">
-            <el-option label="delete" :value="1" />
-            <el-option label="draft" :value="2" />
-            <el-option label="published" :value="3" />
+            <el-option label="publish" :value="'publish'" />
+            <el-option label="save" :value="'save'" />
           </el-select>
         </div>
       </div>
       <div class="mr10">
         时间排序：
         <el-select v-model="listQuery.sort" placeholder="请选择排序" class="w200" size="mini">
-          <el-option label="按时间从近到远" :value="1" />
-          <el-option label="按时间从远到近" :value="-1" />
+          <el-option label="按时间从近到远" :value="-1" />
+          <el-option label="按时间从远到近" :value="1" />
         </el-select>
       </div>
-      <el-button type="primary" @click="getList()" size="mini">查询</el-button>
+      <el-button type="primary" @click="getBlogList()" size="mini">查询</el-button>
     </div>
     <el-table
       :data="list"
@@ -34,40 +29,52 @@
       style="width: 100%"
     >
       <el-table-column
-        prop="date"
-        label="Date"
+        prop="time"
+        label="日期"
         width="150"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.display_time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column
         prop="title"
-        label="Title"
-        width="350"
+        label="文章标题"
+        width="230"
       />
       <el-table-column
         prop="brief"
-        label="Brief"
+        label="文章简介"
       />
       <el-table-column
-        prop="status"
-        label="Status"
-        width="100"
+        prop="tags"
+        label="文章标签"
+        align="center"
+        width="200"
       >
         <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
-            {{ row.status }}
+          <el-tag size="mini" type="info" class="mr5" v-for="(item, index) in row.tags" :key="index">
+            {{ item }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column
-        label="Operation"
+        prop="status"
+        label="文章状态"
+        width="100"
+      >
+        <template slot-scope="{row}">
+          <el-tag :type="row.operate | statusFilter">
+            {{ row.operate }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="操作"
         width="150"
       >
         <template slot-scope="scope">
-          <router-link :to="'/article/edit/'+scope.row.id">
+          <router-link :to="'/article/edit/'+scope.row.aid">
             <el-button type="primary" size="small" icon="el-icon-edit">
               Edit
             </el-button>
@@ -75,11 +82,11 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.curPage" :limit.sync="listQuery.pageSize" @pagination="getBlogList" />
   </div>
 </template>
 <script>
-import { getList } from '@/api/table'
+import { getBlogList } from '@/api/article'
 import Pagination from '@/components/Pagination'
 import TreeSelect from '@/components/TreeSelect'
 
@@ -88,9 +95,8 @@ export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
+        publish: 'success',
+        save: 'warning'
       }
       return statusMap[status]
     }
@@ -104,40 +110,29 @@ export default {
       list: [],
       total: 0,
       listQuery: {
-        page: 1,
-        limit: 10,
-        title: null,
-        brief: null,
+        schWord: null,
+        curPage: 1,
+        pageSize: 10,
         status: [],
         sort: 1
-      },
-      // tags:null,
-      tagsData: [
-        {
-          id: 'published',
-          label: 'published'
-        },
-        {
-          id: 'draft',
-          label: 'draft'
-        },
-        {
-          id: 'deleted',
-          label: 'deleted'
-        }
-      ]
+      }
     }
   },
   created() {
-    this.getList()
+    this.getBlogList()
   },
   methods: {
-    getList() {
+    search() {
+      this.listQuery.curPage = 1;
+      this.getBlogList(this.listQuery)
+    },
+    getBlogList() {
       console.log(this.listQuery)
       // this.listLoading = true
-      getList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
+      getBlogList(this.listQuery).then(res => {
+        console.log(res)
+        this.list = res.dataList
+        this.total = res.total
         // this.listLoading = false
       })
     }
