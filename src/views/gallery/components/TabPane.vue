@@ -6,59 +6,59 @@
       style="width: 100%">
       <el-table-column
         prop="date"
-        label="Date"
+        label="发布日期"
         width="150"
         align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.display_time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column
         prop="title"
-        label="Title"
+        label="标题"
         width="120"
         align="center">
       </el-table-column>
       <el-table-column
         prop="theme"
-        label="Theme"
+        label="主题"
         width="170"
         align="center">
       </el-table-column>
       <el-table-column
-        prop="brief"
-        label="Brief">
+        prop="desc"
+        label="简介">
       </el-table-column>
       <el-table-column
         prop="thumbnail"
-        label="Thumbnail"
+        label="缩略图"
         width="120">
         <template slot-scope="scope">
           <vue-viewer :dom="'img_'+scope.$index" :url="scope.row.url" />
           <el-image
             :id="'img_'+scope.$index"
             style="width: 100px; height: 50px"
-            :src="scope.row.thumbnail"
+            :src="scope.row.url+'?imageView2/1/w/100/h/50'"
             :fit="'cover'"
           />
         </template>
       </el-table-column>
       <el-table-column
         prop="url"
-        label="Url"
+        label="图片地址"
       >
         <template slot-scope="{row}">
           {{ row.url }}
-          <el-button v-clipboard:copy="row.url" v-clipboard:success="clipboardSuccess" size="mini" plain type="success">copy</el-button>
+          <el-button v-clipboard:copy="row.url" v-clipboard:success="clipboardSuccess" size="mini" plain type="success">复制</el-button>
         </template>
       </el-table-column>
       <el-table-column
-        label="Operation"
+        label="操作"
         width="200"
         align="center"
       >
         <template slot-scope="scope">
-          <router-link :to="'/gallery/upload/'+scope.row.id">
+          <router-link :to="'/gallery/upload/'+scope.row.gid">
             <el-button type="primary" size="small" icon="el-icon-edit">
               Edit
             </el-button>
@@ -69,12 +69,12 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total>0" :total="total" :page.sync="query.curPage" :limit.sync="query.pageSize" @pagination="getList" />
   </div>
 </template>
 
 <script>
-import { getGalleryList as GL, getBlogList as BO } from '@/api/table'
+import { getGalleryList as GL, getBlogList as BO } from '@/api/imgs'
 import clipboard from '@/directive/clipboard/index.js' // use clipboard by v-directive
 import Pagination from '@/components/Pagination'
 import VueViewer from '@/components/Viewer'
@@ -91,18 +91,28 @@ export default {
     type: {
       type: String,
       default: 'GL'
+    },
+    query: {
+      type: Object,
+      default: function () {
+        return {
+          schWord: null,
+          curPage: 1,
+          pageSize: 10,
+          sort: 1
+        }
+      }
     }
   },
   data() {
     return {
       list: [],
-      listQuery: {
-        limit: 10,
-        page: 1,
-        title: null,
-        brief: null,
-        sort: 1
-      },
+      // listQuery: {
+      //   schWord: null,
+      //   curPage: 1,
+      //   pageSize: 10,
+      //   sort: 1
+      // },
       total: 0,
       loading: false
     }
@@ -115,11 +125,12 @@ export default {
       this.loading = true
       this.$emit('create') // for test
       const listApi = this.type === 'GL' ? GL : BO
-      const query = Object.assign(this.listQuery, q || {})
+      // const query = Object.assign(this.listQuery, q || {})
 
-      listApi(query).then(res => {
-        this.list = res.data.items
-        this.total = res.data.total
+      listApi(this.query).then(res => {
+        console.log(res)
+        this.list = res.dataList
+        this.total = res.total
         this.loading = false
       })
     },

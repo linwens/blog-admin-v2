@@ -2,12 +2,12 @@
   <div class="gallery-container m15">
     <div class="search-container df mb10">
       <div class="mr10">
-        标题:
-        <el-input v-model="listQuery.title" class="w200" size="mini" />
+        关键字:
+        <el-input v-model="listQuery.schWord" class="w200" size="mini" />
       </div>
       <div class="mr10">
-        简介:
-        <el-input v-model="listQuery.brief" class="w200" size="mini" />
+        主题:
+        <el-input v-model="listQuery.theme" class="w200" size="mini" />
       </div>
       <div class="mr10">
         时间排序：
@@ -38,8 +38,10 @@ export default {
   data() {
     return {
       listQuery: {
-        title: null,
-        brief: null,
+        schWord: null,
+        theme: null,
+        curPage: 1,
+        pageSize: 10,
         sort: 1
       },
       tabs: [
