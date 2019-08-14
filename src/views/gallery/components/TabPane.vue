@@ -63,7 +63,7 @@
               Edit
             </el-button>
           </router-link>
-          <el-button type="danger" size="small" icon="el-icon-delete">
+          <el-button type="danger" size="small" icon="el-icon-delete" @click="removeImg(scope.row.gid)">
             Del
           </el-button>
         </template>
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { getGalleryList as GL, getBlogList as BO } from '@/api/imgs'
+import { getGalleryList as GL, getBlogList as BO, removeImg } from '@/api/imgs'
 import clipboard from '@/directive/clipboard/index.js' // use clipboard by v-directive
 import Pagination from '@/components/Pagination'
 import VueViewer from '@/components/Viewer'
@@ -121,7 +121,30 @@ export default {
     this.getList()
   },
   methods: {
-    getList(q) {
+    removeImg(id) {
+      removeImg({
+        gid: id
+      }).then(res => {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: res.res_msg,
+            duration: 1500
+          });
+          this.getList()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+      })
+    },
+    getList() {
       this.loading = true
       this.$emit('create') // for test
       const listApi = this.type === 'GL' ? GL : BO

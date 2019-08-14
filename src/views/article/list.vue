@@ -114,7 +114,7 @@ export default {
         curPage: 1,
         pageSize: 10,
         status: [],
-        sort: 1
+        sort: -1
       }
     }
   },

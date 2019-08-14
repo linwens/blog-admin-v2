@@ -32,10 +32,25 @@ export function uploadImg(query) {
   })
 }
 
+export function removeImg(query) {
+  return request({
+    url: '/removeImg',
+    method: 'post',
+    data: query
+  })
+}
+
 export function saveUrl(query) {
   return request({
     url: '/saveImg',
     method: 'post',
     data: query
+  })
+}
+
+export function getThemes() {
+  return request({
+    url: '/imgThemes',
+    method: 'get'
   })
 }
