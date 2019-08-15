@@ -97,6 +97,7 @@ export default {
         console.log(res.imgInfo.title)
         this.imgInfo.title = res.imgInfo.title;
         this.imgInfo.desc = res.imgInfo.desc;
+        this.imgInfo.theme = res.imgInfo.theme;
         this.size = res.imgInfo.size;
         this.exif = res.imgInfo.exif;
         this.imgInfo.type = res.imgInfo.type;
