@@ -232,8 +232,13 @@ export default {
         params = Object.assign(params, {option: 'modify'})
       }
       addNPM(params).then((res) => {
-
+        this.$message({
+          type: 'success',
+          message: res.res_msg,
+          duration: 1500
+        })
         this.show = false
+        this.getNpmList()
       })
     },
     // 展示npm项目
@@ -245,6 +250,7 @@ export default {
           message: res.res_msg,
           duration: 1500
         })
+        this.getNpmList()
       })
     },
     search() {

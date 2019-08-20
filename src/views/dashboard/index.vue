@@ -2,7 +2,7 @@
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ name }}</div>
     <el-row :gutter="40" class="panel-group">
-      <el-col :xs="12" :sm="12" :lg="8" class="card-panel-col">
+      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-good">
             <svg-icon icon-class="good" class-name="card-panel-icon" />
@@ -11,11 +11,24 @@
             <div class="card-panel-text">
               已完成的需求
             </div>
-            <count-to :start-val="0" :end-val="50" :duration="2" class="card-panel-num" />
+            <count-to :start-val="0" :end-val="Done_num" :duration="2" class="card-panel-num" />
           </div>
         </div>
       </el-col>
-      <el-col :xs="12" :sm="12" :lg="8" class="card-panel-col">
+      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+        <div class="card-panel">
+          <div class="card-panel-icon-wrapper icon-good">
+            <svg-icon icon-class="good" class-name="card-panel-icon" />
+          </div>
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              已发布的文章
+            </div>
+            <count-to :start-val="0" :end-val="Published_num" :duration="2" class="card-panel-num" />
+          </div>
+        </div>
+      </el-col>
+      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-ing">
             <svg-icon icon-class="ing" class-name="card-panel-icon" />
@@ -24,11 +37,11 @@
             <div class="card-panel-text">
               进行中的需求
             </div>
-            <count-to :start-val="0" :end-val="10" :duration="2" class="card-panel-num" />
+            <count-to :start-val="0" :end-val="Doing_num" :duration="2" class="card-panel-num" />
           </div>
         </div>
       </el-col>
-      <el-col :xs="12" :sm="12" :lg="8" class="card-panel-col">
+      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-photos">
             <svg-icon icon-class="photos" class-name="card-panel-icon" />
@@ -37,7 +50,7 @@
             <div class="card-panel-text">
               摄影作品
             </div>
-            <count-to :start-val="0" :end-val="100" :duration="2" class="card-panel-num" />
+            <count-to :start-val="0" :end-val="Gallery_num" :duration="2" class="card-panel-num" />
           </div>
         </div>
       </el-col>
@@ -81,6 +94,9 @@
 </template>
 
 <script>
+import { getGalleryList as GL } from '@/api/imgs'
+import { getBlogList } from '@/api/article'
+import { getNpmList } from '@/api/npms'
 import { mapGetters } from 'vuex'
 import CountTo from '@/components/VueCount'
 import draggable from 'vuedraggable'
@@ -93,6 +109,10 @@ export default {
   },
   data() {
     return {
+      Done_num: 0,
+      Published_num: 0,
+      Doing_num: 0,
+      Gallery_num: 0,
       needsPool: [
         {
           tabKey: 1,
@@ -147,7 +167,46 @@ export default {
       'name'
     ])
   },
+  created(){
+    this.getNum()
+  },
   methods: {
+    getNum(){
+      // 请求图片
+      GL({
+        curPage: 1,
+        pageSize: 10
+      }).then(res => {
+        console.log(res)
+        this.Gallery_num = res.total
+      })
+      // 请求文章
+      getBlogList({
+        status: ['publish'],
+        curPage: 1,
+        pageSize: 10
+      }).then(res => {
+        console.log(res)
+        this.Published_num = res.total
+      })
+      // 请求完成的需求
+      getNpmList({
+        status: [1],
+        curPage: 1,
+        pageSize: 10
+      }).then(res => {
+        this.Done_num = res.total
+        console.log(this.Done_num >= 0)
+      })
+      // 请求未完成的需求
+      getNpmList({
+        status: [0],
+        curPage: 1,
+        pageSize: 10
+      }).then(res => {
+        this.Doing_num = res.total
+      })
+    },
     addIdea(item) {
       // 增加点子
       const curPoolIndex = this.needsPool.findIndex((val) => {

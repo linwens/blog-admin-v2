@@ -20,7 +20,7 @@ module.exports = {
    */
   publicPath: '/',
   outputDir: 'dist',
-  assetsDir: 'static',
+  assetsDir: 'vueStatic',
   lintOnSave: process.env.NODE_ENV === 'development', // 只有在开发环境下显示eslint提示
   productionSourceMap: false,
   devServer: {

@@ -26,9 +26,15 @@ export default {
   mounted() {
     this.initCountUp()
   },
+  watch:{
+    endVal(n, o){
+      if(n > 0) {
+        this.initCountUp()
+      }
+    }
+  },
   methods: {
     initCountUp() {
-      console.log(this.$refs.countUpDom)
       const countup = new CountUp(this.$refs.countUpDom, this.endVal, {
         startVal: this.startVal,
         duration: this.duration
