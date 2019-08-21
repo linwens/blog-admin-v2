@@ -41,10 +41,12 @@
         prop="title"
         label="文章标题"
         width="230"
+        show-overflow-tooltip
       />
       <el-table-column
         prop="brief"
         label="文章简介"
+        show-overflow-tooltip
       />
       <el-table-column
         prop="tags"
