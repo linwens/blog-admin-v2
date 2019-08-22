@@ -1,6 +1,7 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
+import { Message } from 'element-ui'
 // import permission from './permission';
 
 const state = {
@@ -35,6 +36,14 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         console.log(response)
+        if (response.res_code !== 1) {
+          Message({
+            message: response.res_msg || 'error',
+            type: 'error',
+            duration: 5 * 1000
+          })
+          return reject()
+        }
         const { data } = response
         commit('SET_TOKEN', data.token)
         setToken(data.token)
